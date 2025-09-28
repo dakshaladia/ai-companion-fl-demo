@@ -1,0 +1,11 @@
+flwr==1.9.0
+torch==2.8.0
+transformers==4.44.2
+peft==0.10.0
+opacus==1.4.0
+Flask==3.0.3
+mlx-lm==0.28.1
+# Note: MLX requires Python 3.11 or 3.12 (not 3.13) for proper compatibility
+# Optional (install if needed for additional features):
+# sentencepiece==0.2.0
+# faster-whisper==1.0.3
