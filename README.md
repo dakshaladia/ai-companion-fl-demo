@@ -1,1 +1,1 @@
-building a waitlist : mindfree.app
+building a waitlist : https://mindfree.app
