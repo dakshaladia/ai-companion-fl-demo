@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 from datetime import datetime
 from typing import List, Dict, Any, Optional
@@ -13,14 +14,20 @@ except Exception:
     WhisperModel = None  # Optional: STT disabled if not installed
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from models.lora_model import get_lora_model
+
 
 APP_PORT = int(os.environ.get("PORTAL_PORT", 5000))
 APP_HOST = os.environ.get("PORTAL_HOST", "127.0.0.1")  # bind to localhost only
 MLX_MODEL_NAME = os.environ.get("PORTAL_MLX_MODEL", "mlx-community/Llama-3.2-1B-Instruct-4bit")
 STT_MODEL_NAME = os.environ.get("PORTAL_STT_MODEL", "tiny.en")
 COMPUTE_DEVICE = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.is_available() else "cpu")
+PORTAL_MAX_TOKENS = int(os.environ.get("PORTAL_MAX_TOKENS", "160"))
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 CHAT_LOG_PATH = os.path.join(DATA_DIR, "chat.jsonl")
+CHECKPOINT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "checkpoints")
+FL_CHECKPOINT_PATH = os.path.join(CHECKPOINT_DIR, "fl_mood_classifier.pt")
 
 
 def ensure_data_dir() -> None:
@@ -52,6 +59,8 @@ def read_recent_chats(limit: int = 50) -> List[Dict[str, Any]]:
 
 _mlx_model = None
 _mlx_tokenizer = None
+_fl_model = None
+_fl_tokenizer = None
 
 
 def _load_mlx_model() -> None:
@@ -61,6 +70,78 @@ def _load_mlx_model() -> None:
     # MLX API: load(model_name) -> (model, tokenizer)
     # Prefer slow tokenizers to avoid Rust tokenizers build on Python 3.13
     _mlx_model, _mlx_tokenizer = mlx_load(MLX_MODEL_NAME, tokenizer_config={"use_fast": True})
+
+
+def _load_fl_model() -> None:
+    """Load the federated learning mood classifier if available."""
+    global _fl_model, _fl_tokenizer
+    if _fl_model is not None and _fl_tokenizer is not None:
+        return
+    
+    if not os.path.exists(FL_CHECKPOINT_PATH):
+        logging.warning(f"FL model checkpoint not found at {FL_CHECKPOINT_PATH}")
+        return
+    
+    try:
+        # Load the model architecture
+        _fl_model = get_lora_model()
+        _fl_model.to(COMPUTE_DEVICE)
+        
+        # Load the checkpoint
+        checkpoint = torch.load(FL_CHECKPOINT_PATH, map_location=COMPUTE_DEVICE)
+        _fl_model.load_state_dict(checkpoint['model_state_dict'])
+        _fl_model.eval()
+        
+        # Load tokenizer
+        _fl_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+        
+        logging.info(f"✅ FL mood classifier loaded from {FL_CHECKPOINT_PATH}")
+    except Exception as e:
+        logging.exception(f"Failed to load FL model: {e}")
+        _fl_model = None
+        _fl_tokenizer = None
+
+
+def predict_mood(text: str) -> Optional[Dict[str, Any]]:
+    """
+    Predict mood using the federated learning model.
+    
+    Returns:
+        dict with 'label' (0=negative, 1=positive) and 'confidence' (0-1)
+        or None if model is not available
+    """
+    _load_fl_model()
+    
+    if _fl_model is None or _fl_tokenizer is None:
+        return None
+    
+    try:
+        # Tokenize input
+        inputs = _fl_tokenizer(
+            text,
+            padding="max_length",
+            truncation=True,
+            max_length=128,
+            return_tensors="pt"
+        )
+        inputs = {k: v.to(COMPUTE_DEVICE) for k, v in inputs.items()}
+        
+        # Get prediction
+        with torch.no_grad():
+            outputs = _fl_model(**inputs)
+            logits = outputs.logits
+            probs = torch.softmax(logits, dim=-1)
+            predicted_label = torch.argmax(probs, dim=-1).item()
+            confidence = probs[0, predicted_label].item()
+        
+        return {
+            'label': predicted_label,
+            'confidence': confidence,
+            'mood': 'positive' if predicted_label == 1 else 'negative'
+        }
+    except Exception as e:
+        logging.exception(f"Mood prediction failed: {e}")
+        return None
 
 
 _stt_model: Optional[WhisperModel] = None
@@ -93,12 +174,36 @@ MAX_CONTEXT_TURNS = int(os.environ.get("PORTAL_MAX_CONTEXT_TURNS", "2"))
 
 
 def _build_mlx_prompt(latest_user_text: str, max_turns: int = MAX_CONTEXT_TURNS) -> str:
-    """Build a simple prompt for the mental health assistant."""
+    """Build a prompt with conversation context for the mental health assistant."""
     
-    # For now, disable conversation context to fix the response issue
-    # TODO: Re-enable conversation context with better prompt engineering
+    # Get recent conversation history
+    recent_chats = read_recent_chats(limit=3)
     
-    prompt = f"""You are a compassionate mental health support assistant. Respond with 1-2 short, empathetic sentences to help the user feel heard and supported. Be warm, understanding, and offer gentle suggestions when appropriate. Avoid medical advice.
+    # Build conversation history (last N turns, excluding current message)
+    conversation_history = []
+    for event in recent_chats[-(max_turns * 2):]:  # Get last N turns (user + assistant pairs)
+        role = event.get("role", "")
+        text = event.get("text", "").strip()
+        if text:
+            if role == "user":
+                conversation_history.append(f"User: {text}")
+            elif role == "assistant":
+                conversation_history.append(f"Assistant: {text}")
+    
+    # Build the full prompt with context
+    if conversation_history:
+        context = "\n".join(conversation_history)
+        prompt = f"""You are a compassionate mental health support assistant. Continue this conversation naturally. Respond with 1-2 short, empathetic sentences that directly address what the user just said. Be warm, understanding, and offer gentle suggestions when appropriate. Avoid medical advice.
+
+Previous conversation:
+{context}
+
+Current message (respond to THIS):
+User: {latest_user_text.strip()}
+Assistant:"""
+    else:
+        # First message, no history
+        prompt = f"""You are a compassionate mental health support assistant. Respond with 1-2 short, empathetic sentences to help the user feel heard and supported. Be warm, understanding, and offer gentle suggestions when appropriate. Avoid medical advice.
 
 User: {latest_user_text.strip()}
 Assistant:"""
@@ -119,11 +224,25 @@ def generate_response(user_text: str) -> str:
 
     _load_mlx_model()
     
-    # Create a very simple, direct prompt to ensure the AI responds to the current message
-    prompt = f"""You are a compassionate mental health support assistant. Respond with 1-2 short, empathetic sentences to help the user feel heard and supported. Be warm, understanding, and offer gentle suggestions when appropriate. Avoid medical advice.
-
-User: {text}
-Assistant:"""
+    # Predict mood using federated learning model
+    mood_prediction = predict_mood(text)
+    
+    # Build prompt with conversation context
+    prompt = _build_mlx_prompt(text)
+    
+    # If we have mood prediction with high confidence, inject mood context
+    if mood_prediction and mood_prediction['confidence'] > 0.6:
+        mood = mood_prediction['mood']
+        confidence = mood_prediction['confidence']
+        
+        if mood == 'negative':
+            mood_hint = "\n[Note: The user seems to be struggling. Be extra empathetic and validating.]"
+        else:
+            mood_hint = "\n[Note: The user seems to be in a better mood. Be encouraging and positive.]"
+        
+        # Insert mood hint before the final "Assistant:" line
+        prompt = prompt.replace("Assistant:", f"{mood_hint}\nAssistant:")
+        logging.info(f"Mood-aware response: {mood} (confidence: {confidence:.2f})")
     
     # Create sampler with the new API
     sampler = make_sampler(
@@ -139,7 +258,7 @@ Assistant:"""
         _mlx_model,
         _mlx_tokenizer,
         prompt=prompt,
-        max_tokens=96,
+        max_tokens=PORTAL_MAX_TOKENS,
         sampler=sampler,
         logits_processors=logits_processors,
         verbose=False,
@@ -158,6 +277,12 @@ Assistant:"""
     
     # Also remove any escaped quotes that might be in the middle
     reply = reply.replace('\\"', '"').replace("\\'", "'")
+
+    # Prefer returning a complete sentence: trim to last sentence-ending punctuation if needed
+    if not reply.endswith((".", "!", "?")):
+        last_period = max(reply.rfind("."), reply.rfind("!"), reply.rfind("?"))
+        if last_period != -1:
+            reply = reply[: last_period + 1].strip()
 
     if not reply:
         # More varied fallback responses
@@ -216,7 +341,8 @@ def index() -> Response:
     <div class="chat">
       <div class="disclaimer">
         <strong>Privacy:</strong> Conversations stay on this device. Only anonymized model updates may be shared during federated learning rounds (never raw text). This is not a crisis service. If you're in immediate danger, call your local emergency number or, in the U.S., dial <strong>988</strong>.<br>
-        <strong>Label Box:</strong> Optionally label your mood to help improve the AI's understanding of different emotional states (for federated learning).
+        <strong>Label Box:</strong> Optionally label your mood to help improve the AI's understanding of different emotional states (for federated learning).<br>
+        <strong>Mood Detection:</strong> If available, a trained FL model will automatically detect your mood and tailor responses accordingly (shown with emoji icons).
       </div>
       <div id="log" class="row">
         CHAT_HISTORY_PLACEHOLDER
@@ -229,7 +355,7 @@ def index() -> Response:
           <option value="1">Feeling okay (label 1)</option>
         </select>
         <button onclick="send()">Send</button>
-        <button id="recordBtn" onclick="toggleRecord()">🎤 Start</button>
+        # <button id="recordBtn" onclick="toggleRecord()">🎤 Start</button>
       </div>
     </div>
     <script>
@@ -248,7 +374,12 @@ def index() -> Response:
         const log = document.getElementById('log');
         const user = document.createElement('div');
         user.className = 'msg user';
-        user.innerHTML = '<div>' + text + '</div><div class="meta">just now' + (label!==''? ' · label='+label: '') + '</div>';
+        let moodText = '';
+        if (data.mood) {
+          const moodEmoji = data.mood.mood === 'positive' ? '😊' : '😔';
+          moodText = ' · ' + moodEmoji + ' ' + data.mood.mood + ' (' + Math.round(data.mood.confidence * 100) + '%)';
+        }
+        user.innerHTML = '<div>' + text + '</div><div class="meta">just now' + (label!==''? ' · label='+label: '') + moodText + '</div>';
         log.appendChild(user);
         const asst = document.createElement('div');
         asst.className = 'msg assistant';
@@ -322,7 +453,13 @@ def send() -> Response:
         return jsonify({"error": "empty"}), 400
 
     ts = datetime.utcnow().isoformat() + "Z"
+    
+    # Predict mood if FL model is available
+    mood_prediction = predict_mood(text)
+    
     user_event = {"role": "user", "text": text, "timestamp": ts, "label": label}
+    if mood_prediction:
+        user_event["predicted_mood"] = mood_prediction
     append_chat_event(user_event)
 
     try:
@@ -337,7 +474,29 @@ def send() -> Response:
     asst_event = {"role": "assistant", "text": reply, "timestamp": datetime.utcnow().isoformat() + "Z"}
     append_chat_event(asst_event)
 
-    return jsonify({"reply": reply})
+    response_data = {"reply": reply}
+    if mood_prediction:
+        response_data["mood"] = mood_prediction
+    
+    return jsonify(response_data)
+
+
+@app.post("/predict_mood")
+def predict_mood_endpoint() -> Response:
+    """Endpoint to predict mood from text using the FL model."""
+    payload = request.get_json(force=True, silent=True) or {}
+    text = (payload.get("text") or "").strip()
+    if not text:
+        return jsonify({"error": "empty"}), 400
+    
+    mood_prediction = predict_mood(text)
+    if mood_prediction is None:
+        return jsonify({
+            "error": "model_not_available",
+            "message": "FL mood classifier not available. Run federated training first."
+        }), 503
+    
+    return jsonify(mood_prediction)
 
 
 @app.post("/stt")

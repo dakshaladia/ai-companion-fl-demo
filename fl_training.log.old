@@ -1,0 +1,155 @@
+🚀 Starting FL server on 127.0.0.1:8080 ...
+⏳ Waiting for server to initialize (10 seconds)...
+[92mINFO [0m:      Starting Flower server, config: num_rounds=3, no round_timeout
+INFO:flwr:Starting Flower server, config: num_rounds=3, no round_timeout
+[92mINFO [0m:      Flower ECE: gRPC server running (3 rounds), SSL is disabled
+INFO:flwr:Flower ECE: gRPC server running (3 rounds), SSL is disabled
+[92mINFO [0m:      [INIT]
+INFO:flwr:[INIT]
+[92mINFO [0m:      Requesting initial parameters from one random client
+INFO:flwr:Requesting initial parameters from one random client
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1762396880.846442 41069034 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I0000 00:00:1762396880.853433 41069034 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+👥 Starting client 1...
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+👥 Starting client 2...
+⏳ Waiting for training to complete...
+11/05/2025 21:41:30:DEBUG:Opened insecure gRPC connection (no certificates were passed)
+11/05/2025 21:41:30:DEBUG:ChannelConnectivity.IDLE
+11/05/2025 21:41:30:DEBUG:ChannelConnectivity.READY
+[92mINFO [0m:      
+11/05/2025 21:41:30:INFO:
+[92mINFO [0m:      Received: get_parameters message 559154bc-b3b9-4fb9-9dac-3834c1e1abb8
+11/05/2025 21:41:30:INFO:Received: get_parameters message 559154bc-b3b9-4fb9-9dac-3834c1e1abb8
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1762396890.975099 41069302 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I0000 00:00:1762396890.982770 41069302 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+[92mINFO [0m:      Sent reply
+11/05/2025 21:41:31:INFO:Sent reply
+E0000 00:00:1762396891.799461 41069054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      Received initial parameters from one random client
+INFO:flwr:Received initial parameters from one random client
+[92mINFO [0m:      Evaluating initial global parameters
+INFO:flwr:Evaluating initial global parameters
+[92mINFO [0m:      
+INFO:flwr:
+[92mINFO [0m:      [ROUND 1]
+INFO:flwr:[ROUND 1]
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+11/05/2025 21:41:32:DEBUG:Opened insecure gRPC connection (no certificates were passed)
+11/05/2025 21:41:32:DEBUG:ChannelConnectivity.IDLE
+11/05/2025 21:41:32:DEBUG:ChannelConnectivity.CONNECTING
+[92mINFO [0m:      configure_fit: strategy sampled 2 clients (out of 2)
+INFO:flwr:configure_fit: strategy sampled 2 clients (out of 2)
+11/05/2025 21:41:32:DEBUG:ChannelConnectivity.READY
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1762396892.826584 41069424 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I0000 00:00:1762396892.836175 41069424 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0000 00:00:1762396894.361847 41069446 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1762396894.407800 41069323 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:41:34:INFO:
+[92mINFO [0m:      Received: train message 99950b6f-c735-4264-93dd-460f0ef338d2
+11/05/2025 21:41:34:INFO:Received: train message 99950b6f-c735-4264-93dd-460f0ef338d2
+[92mINFO [0m:      
+11/05/2025 21:41:34:INFO:
+[92mINFO [0m:      Received: train message 7242e3d1-e6b1-4501-8b4c-09a38fa4b26f
+11/05/2025 21:41:34:INFO:Received: train message 7242e3d1-e6b1-4501-8b4c-09a38fa4b26f
+[92mINFO [0m:      Sent reply
+[92mINFO [0m:      Sent reply
+11/05/2025 21:41:37:INFO:Sent reply
+11/05/2025 21:41:37:INFO:Sent reply
+E0000 00:00:1762396897.976090 41069054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      aggregate_fit: received 2 results and 0 failures
+INFO:flwr:aggregate_fit: received 2 results and 0 failures
+[93mWARNING [0m:   No fit_metrics_aggregation_fn provided
+WARNING:flwr:No fit_metrics_aggregation_fn provided
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+🚀 Starting Flower server on 127.0.0.1:8080 ...
+Traceback (most recent call last):
+  File "/Users/dakshaladia/fl-mentalhealth/server/server.py", line 89, in <module>
+    fl.server.start_server(
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/app.py", line 180, in start_server
+    hist = run_fl(
+           ^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/server.py", line 490, in run_fl
+    hist, elapsed_time = server.fit(
+                         ^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/server.py", line 113, in fit
+    res_fit = self.fit_round(
+              ^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/server.py", line 249, in fit_round
+    ] = self.strategy.aggregate_fit(server_round, results, failures)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/server/server.py", line 65, in aggregate_fit
+    save_model_checkpoint(parameters_list, round_path)
+  File "/Users/dakshaladia/fl-mentalhealth/server/server.py", line 29, in save_model_checkpoint
+    state_dict = dict(zip(model.state_dict().keys(), [torch.tensor(w) for w in parameters]))
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/server/server.py", line 29, in <listcomp>
+    state_dict = dict(zip(model.state_dict().keys(), [torch.tensor(w) for w in parameters]))
+                                                      ^^^^^^^^^^^^^^^
+TypeError: can't convert np.ndarray of type numpy.bytes_. The only supported types are: float64, float32, float16, complex64, complex128, int64, int32, int16, int8, uint64, uint32, uint16, uint8, and bool.
+./run.sh: line 32: 43209 Killed: 9               python server/server.py
+11/05/2025 21:46:55:DEBUG:ChannelConnectivity.IDLE
+11/05/2025 21:46:55:DEBUG:ChannelConnectivity.IDLE
+11/05/2025 21:46:55:DEBUG:gRPC channel closed
+11/05/2025 21:46:55:DEBUG:gRPC channel closed
+🤝 Starting Flower client, connecting to 127.0.0.1:8080 ...
+Training batch, loss=0.6547
+Training batch, loss=0.7510
+Training batch, loss=0.6058
+Training batch, loss=0.5756
+Training batch, loss=0.8460
+Traceback (most recent call last):
+  File "/Users/dakshaladia/fl-mentalhealth/client/client.py", line 163, in <module>
+    fl.client.start_client(
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/client/app.py", line 157, in start_client
+    _start_client_internal(
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/client/app.py", line 333, in _start_client_internal
+    message = receive()
+              ^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/client/grpc_client/connection.py", line 144, in receive
+    proto = next(server_message_iterator)
+🤝 Starting Flower client, connecting to 127.0.0.1:8080 ...
+Training batch, loss=0.7028
+Training batch, loss=0.7118
+Training batch, loss=0.6175
+Training batch, loss=0.5737
+Training batch, loss=0.8503
+Traceback (most recent call last):
+  File "/Users/dakshaladia/fl-mentalhealth/client/client.py", line 163, in <module>
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/grpc/_channel.py", line 543, in __next__
+    return self._next()
+           ^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/grpc/_channel.py", line 972, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Socket closed"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:8080 {grpc_message:"Socket closed", grpc_status:14}"
+>
+    fl.client.start_client(
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/client/app.py", line 157, in start_client
+    _start_client_internal(
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/client/app.py", line 333, in _start_client_internal
+    message = receive()
+              ^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/client/grpc_client/connection.py", line 144, in receive
+    proto = next(server_message_iterator)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/grpc/_channel.py", line 543, in __next__
+    return self._next()
+           ^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/grpc/_channel.py", line 972, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Socket closed"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:8080 {grpc_message:"Socket closed", grpc_status:14}"
+>

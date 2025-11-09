@@ -5,7 +5,11 @@ import logging
 import flwr as fl
 import torch
 from torch.utils.data import DataLoader
-from opacus import PrivacyEngine
+from typing import Optional
+try:
+    from opacus import PrivacyEngine  # type: ignore
+except Exception:  # pragma: no cover
+    PrivacyEngine = None  # type: ignore
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -18,7 +22,8 @@ DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 
 
 USE_CHAT_DATA = os.environ.get("USE_CHAT_DATA", "0") == "1"
-BATCH_SIZE = int(os.environ.get("BATCH_SIZE", "8"))
+USE_DP = os.environ.get("USE_DP", "0") == "1"
+BATCH_SIZE = int(os.environ.get("BATCH_SIZE", "1"))
 NOISE_MULTIPLIER = float(os.environ.get("NOISE_MULTIPLIER", "1.0"))
 MAX_GRAD_NORM = float(os.environ.get("MAX_GRAD_NORM", "1.0"))
 
@@ -41,15 +46,39 @@ else:
 train_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
 
-# Attach Opacus privacy engine
-privacy_engine = PrivacyEngine()
-model, optimizer, train_loader = privacy_engine.make_private(
-    module=model,
-    optimizer=optimizer,
-    data_loader=train_loader,
-    noise_multiplier=NOISE_MULTIPLIER,
-    max_grad_norm=MAX_GRAD_NORM,
-)
+# Attach Opacus privacy engine conditionally (avoid incompatibility issues)
+def maybe_attach_privacy(
+    model: torch.nn.Module,
+    optimizer: torch.optim.Optimizer,
+    loader: DataLoader,
+) -> DataLoader:
+    if not USE_DP:
+        logging.info("Differential privacy disabled (USE_DP=0). Proceeding without Opacus.")
+        return loader
+    if PrivacyEngine is None:
+        logging.warning("Opacus not available; proceeding without differential privacy.")
+        return loader
+    try:
+        privacy_engine = PrivacyEngine()
+        m, opt, dl = privacy_engine.make_private(
+            module=model,
+            optimizer=optimizer,
+            data_loader=loader,
+            noise_multiplier=NOISE_MULTIPLIER,
+            max_grad_norm=MAX_GRAD_NORM,
+        )
+        # Update references if Opacus wraps them
+        globals()["model"] = m
+        globals()["optimizer"] = opt
+        logging.info("Opacus privacy engine attached successfully.")
+        return dl
+    except Exception as e:
+        logging.warning(
+            "Failed to attach Opacus privacy engine (%s). Training without DP.", e
+        )
+        return loader
+
+train_loader = maybe_attach_privacy(model, optimizer, train_loader)
 
 
 def train():
@@ -74,11 +103,19 @@ def train():
 
 
 def get_weights():
+    """
+    Get model weights as NumPy arrays.
+    
+    Note: CPU conversion is necessary for Flower's NumPyClient protocol.
+    This only happens during parameter exchange (not during training),
+    so the performance impact is minimal.
+    """
     return [val.cpu().numpy() for _, val in model.state_dict().items()]
 
 
 def set_weights(weights):
-    state_dict = dict(zip(model.state_dict().keys(), [torch.tensor(w) for w in weights]))
+    """Set model weights from NumPy arrays, moving them to the appropriate device."""
+    state_dict = dict(zip(model.state_dict().keys(), [torch.tensor(w).to(DEVICE) for w in weights]))
     model.load_state_dict(state_dict, strict=True)
 
 
@@ -121,9 +158,9 @@ class FlowerClient(fl.client.NumPyClient):
 
 
 if __name__ == "__main__":
-    print("🤝 Starting Flower client, connecting to 127.0.0.1:8080 ...")
-    # Use the non-deprecated client API and connect to localhost
+    server_address = os.environ.get("FL_SERVER_ADDRESS", "127.0.0.1:8080")
+    print(f"🤝 Starting Flower client, connecting to {server_address} ...")
     fl.client.start_client(
-        server_address="127.0.0.1:8080",
+        server_address=server_address,
         client=FlowerClient().to_client(),
     )

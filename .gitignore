@@ -86,3 +86,8 @@ Thumbs.db
 
 # Chat data (optional - remove if you want to track chat history)
 data/chat.jsonl
+
+# Federated learning checkpoints
+checkpoints/
+*.pt
+*.pth

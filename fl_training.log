@@ -1,0 +1,284 @@
+🚀 Starting FL server on 127.0.0.1:8080 ...
+⏳ Waiting for server to initialize (10 seconds)...
+[92mINFO [0m:      Starting Flower server, config: num_rounds=3, no round_timeout
+INFO:flwr:Starting Flower server, config: num_rounds=3, no round_timeout
+[92mINFO [0m:      Flower ECE: gRPC server running (3 rounds), SSL is disabled
+INFO:flwr:Flower ECE: gRPC server running (3 rounds), SSL is disabled
+[92mINFO [0m:      [INIT]
+INFO:flwr:[INIT]
+[92mINFO [0m:      Requesting initial parameters from one random client
+INFO:flwr:Requesting initial parameters from one random client
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1762397218.096667 41077039 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I0000 00:00:1762397218.106493 41077039 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+👥 Starting client 1...
+👥 Starting client 2...
+⏳ Waiting for training to complete...
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+11/05/2025 21:47:08:DEBUG:Opened insecure gRPC connection (no certificates were passed)
+11/05/2025 21:47:08:DEBUG:ChannelConnectivity.IDLE
+11/05/2025 21:47:08:DEBUG:ChannelConnectivity.CONNECTING
+11/05/2025 21:47:08:DEBUG:ChannelConnectivity.READY
+[92mINFO [0m:      
+11/05/2025 21:47:08:INFO:
+[92mINFO [0m:      Received: get_parameters message 8f039572-9643-44d0-982f-f11f389bf340
+11/05/2025 21:47:08:INFO:Received: get_parameters message 8f039572-9643-44d0-982f-f11f389bf340
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1762397228.763528 41077389 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I0000 00:00:1762397228.780331 41077389 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:11:INFO:Sent reply
+E0000 00:00:1762397231.123950 41077059 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      Received initial parameters from one random client
+INFO:flwr:Received initial parameters from one random client
+[92mINFO [0m:      Evaluating initial global parameters
+INFO:flwr:Evaluating initial global parameters
+[92mINFO [0m:      
+INFO:flwr:
+[92mINFO [0m:      [ROUND 1]
+INFO:flwr:[ROUND 1]
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+11/05/2025 21:47:12:DEBUG:Opened insecure gRPC connection (no certificates were passed)
+11/05/2025 21:47:12:DEBUG:ChannelConnectivity.IDLE
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1762397232.244406 41077614 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+11/05/2025 21:47:12:DEBUG:ChannelConnectivity.CONNECTING
+[92mINFO [0m:      configure_fit: strategy sampled 2 clients (out of 2)
+INFO:flwr:configure_fit: strategy sampled 2 clients (out of 2)
+11/05/2025 21:47:12:DEBUG:ChannelConnectivity.READY
+I0000 00:00:1762397232.270352 41077614 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0000 00:00:1762397233.973188 41077410 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1762397234.718643 41077636 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:47:14:INFO:
+[92mINFO [0m:      Received: train message 88e8ec15-2533-474d-8b5b-0588faefcc92
+11/05/2025 21:47:14:INFO:Received: train message 88e8ec15-2533-474d-8b5b-0588faefcc92
+[92mINFO [0m:      
+11/05/2025 21:47:15:INFO:
+[92mINFO [0m:      Received: train message 198f0654-7fcc-48ec-9182-deaa037b71c3
+11/05/2025 21:47:15:INFO:Received: train message 198f0654-7fcc-48ec-9182-deaa037b71c3
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:17:INFO:Sent reply
+[92mINFO [0m:      Sent reply
+E0000 00:00:1762397238.240501 41077059 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+11/05/2025 21:47:18:INFO:Sent reply
+[92mINFO [0m:      aggregate_fit: received 2 results and 0 failures
+INFO:flwr:aggregate_fit: received 2 results and 0 failures
+[93mWARNING [0m:   No fit_metrics_aggregation_fn provided
+WARNING:flwr:No fit_metrics_aggregation_fn provided
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+[92mINFO [0m:      configure_evaluate: strategy sampled 2 clients (out of 2)
+INFO:flwr:configure_evaluate: strategy sampled 2 clients (out of 2)
+E0000 00:00:1762397241.806670 41077410 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1762397242.640672 41077636 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:47:22:INFO:
+[92mINFO [0m:      Received: evaluate message a22a7f78-306e-4854-a0a9-c6392ad92b3d
+11/05/2025 21:47:22:INFO:Received: evaluate message a22a7f78-306e-4854-a0a9-c6392ad92b3d
+[92mINFO [0m:      
+11/05/2025 21:47:23:INFO:
+[92mINFO [0m:      Received: evaluate message 92bdfd42-a574-4343-be1b-edfc1a540abd
+11/05/2025 21:47:23:INFO:Received: evaluate message 92bdfd42-a574-4343-be1b-edfc1a540abd
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:23:INFO:Sent reply
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:23:INFO:Sent reply
+[92mINFO [0m:      aggregate_evaluate: received 2 results and 0 failures
+INFO:flwr:aggregate_evaluate: received 2 results and 0 failures
+[93mWARNING [0m:   No evaluate_metrics_aggregation_fn provided
+WARNING:flwr:No evaluate_metrics_aggregation_fn provided
+[92mINFO [0m:      
+INFO:flwr:
+[92mINFO [0m:      [ROUND 2]
+INFO:flwr:[ROUND 2]
+[92mINFO [0m:      configure_fit: strategy sampled 2 clients (out of 2)
+INFO:flwr:configure_fit: strategy sampled 2 clients (out of 2)
+E0000 00:00:1762397244.809659 41077410 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1762397245.214624 41077634 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:47:25:INFO:
+[92mINFO [0m:      Received: train message e1eb26b8-a9d1-4c68-8ea7-9bbd0e624b9a
+11/05/2025 21:47:25:INFO:Received: train message e1eb26b8-a9d1-4c68-8ea7-9bbd0e624b9a
+[92mINFO [0m:      
+11/05/2025 21:47:25:INFO:
+[92mINFO [0m:      Received: train message cf68c232-4f1b-4065-a9c1-0a652a0f5489
+11/05/2025 21:47:25:INFO:Received: train message cf68c232-4f1b-4065-a9c1-0a652a0f5489
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:28:INFO:Sent reply
+E0000 00:00:1762397248.091826 41077059 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:28:INFO:Sent reply
+[92mINFO [0m:      aggregate_fit: received 2 results and 0 failures
+INFO:flwr:aggregate_fit: received 2 results and 0 failures
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+[92mINFO [0m:      configure_evaluate: strategy sampled 2 clients (out of 2)
+INFO:flwr:configure_evaluate: strategy sampled 2 clients (out of 2)
+E0000 00:00:1762397251.180425 41077410 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:47:31:INFO:
+[92mINFO [0m:      Received: evaluate message 11ad015a-11c6-422d-835d-7e4eaa3f3d6c
+11/05/2025 21:47:31:INFO:Received: evaluate message 11ad015a-11c6-422d-835d-7e4eaa3f3d6c
+E0000 00:00:1762397251.948770 41077636 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:47:32:INFO:
+[92mINFO [0m:      Received: evaluate message 762b4198-e962-4e7b-afb6-3d4be9e9309f
+11/05/2025 21:47:32:INFO:Received: evaluate message 762b4198-e962-4e7b-afb6-3d4be9e9309f
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:32:INFO:Sent reply
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:32:INFO:Sent reply
+[92mINFO [0m:      aggregate_evaluate: received 2 results and 0 failures
+INFO:flwr:aggregate_evaluate: received 2 results and 0 failures
+[92mINFO [0m:      
+INFO:flwr:
+[92mINFO [0m:      [ROUND 3]
+INFO:flwr:[ROUND 3]
+[92mINFO [0m:      configure_fit: strategy sampled 2 clients (out of 2)
+INFO:flwr:configure_fit: strategy sampled 2 clients (out of 2)
+E0000 00:00:1762397254.208511 41077410 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1762397254.252353 41077636 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:47:34:INFO:
+[92mINFO [0m:      Received: train message 1325daf0-9e55-437a-b675-ead72e7cb0f8
+11/05/2025 21:47:34:INFO:Received: train message 1325daf0-9e55-437a-b675-ead72e7cb0f8
+[92mINFO [0m:      
+11/05/2025 21:47:34:INFO:
+[92mINFO [0m:      Received: train message dd793f90-c5fd-4ff1-93c0-43ce692c8b23
+11/05/2025 21:47:34:INFO:Received: train message dd793f90-c5fd-4ff1-93c0-43ce692c8b23
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:36:INFO:Sent reply
+E0000 00:00:1762397256.814598 41077059 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:36:INFO:Sent reply
+[92mINFO [0m:      aggregate_fit: received 2 results and 0 failures
+INFO:flwr:aggregate_fit: received 2 results and 0 failures
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+[92mINFO [0m:      configure_evaluate: strategy sampled 2 clients (out of 2)
+INFO:flwr:configure_evaluate: strategy sampled 2 clients (out of 2)
+E0000 00:00:1762397259.492633 41077634 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1762397259.534112 41077410 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+[92mINFO [0m:      
+11/05/2025 21:47:40:INFO:
+[92mINFO [0m:      Received: evaluate message c018e14b-a6c1-44ad-b1d6-e17671ca3692
+11/05/2025 21:47:40:INFO:Received: evaluate message c018e14b-a6c1-44ad-b1d6-e17671ca3692
+[92mINFO [0m:      
+11/05/2025 21:47:40:INFO:
+[92mINFO [0m:      Received: evaluate message d7e2a94b-9e34-4421-9b22-d9ac13997e89
+11/05/2025 21:47:40:INFO:Received: evaluate message d7e2a94b-9e34-4421-9b22-d9ac13997e89
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:40:INFO:Sent reply
+[92mINFO [0m:      Sent reply
+11/05/2025 21:47:40:INFO:Sent reply
+[92mINFO [0m:      aggregate_evaluate: received 2 results and 0 failures
+INFO:flwr:aggregate_evaluate: received 2 results and 0 failures
+[92mINFO [0m:      
+INFO:flwr:
+[92mINFO [0m:      [SUMMARY]
+INFO:flwr:[SUMMARY]
+[92mINFO [0m:      Run finished 3 round(s) in 29.60s
+INFO:flwr:Run finished 3 round(s) in 29.60s
+[92mINFO [0m:      	History (loss, distributed):
+INFO:flwr:	History (loss, distributed):
+[92mINFO [0m:      		round 1: 0.5463422536849976
+INFO:flwr:		round 1: 0.5463422536849976
+[92mINFO [0m:      		round 2: 0.5068327784538269
+INFO:flwr:		round 2: 0.5068327784538269
+[92mINFO [0m:      		round 3: 0.4762430787086487
+INFO:flwr:		round 3: 0.4762430787086487
+[92mINFO [0m:      
+INFO:flwr:
+[92mINFO [0m:      
+11/05/2025 21:47:41:INFO:
+[92mINFO [0m:      Received: reconnect message 6473c9d2-c0b0-492c-b59a-3110b03fab50
+11/05/2025 21:47:41:INFO:Received: reconnect message 6473c9d2-c0b0-492c-b59a-3110b03fab50
+[92mINFO [0m:      
+11/05/2025 21:47:41:INFO:
+[92mINFO [0m:      Received: reconnect message 9f0c3b27-ed6d-48fc-a92b-82af3055ef12
+11/05/2025 21:47:41:INFO:Received: reconnect message 9f0c3b27-ed6d-48fc-a92b-82af3055ef12
+11/05/2025 21:47:41:DEBUG:gRPC channel closed
+[92mINFO [0m:      Disconnect and shut down
+11/05/2025 21:47:41:DEBUG:gRPC channel closed
+11/05/2025 21:47:41:INFO:Disconnect and shut down
+[92mINFO [0m:      Disconnect and shut down
+11/05/2025 21:47:41:INFO:Disconnect and shut down
+🚀 Starting Flower server on 127.0.0.1:8080 ...
+✅ Saved model checkpoint to /Users/dakshaladia/fl-mentalhealth/checkpoints/fl_mood_classifier_round1.pt
+✅ Saved model checkpoint to /Users/dakshaladia/fl-mentalhealth/checkpoints/fl_mood_classifier.pt
+📊 Round 1 complete - model saved
+✅ Saved model checkpoint to /Users/dakshaladia/fl-mentalhealth/checkpoints/fl_mood_classifier_round2.pt
+✅ Saved model checkpoint to /Users/dakshaladia/fl-mentalhealth/checkpoints/fl_mood_classifier.pt
+📊 Round 2 complete - model saved
+✅ Saved model checkpoint to /Users/dakshaladia/fl-mentalhealth/checkpoints/fl_mood_classifier_round3.pt
+✅ Saved model checkpoint to /Users/dakshaladia/fl-mentalhealth/checkpoints/fl_mood_classifier.pt
+📊 Round 3 complete - model saved
+✅ Server finished training rounds
+💾 Final model saved to /Users/dakshaladia/fl-mentalhealth/checkpoints/fl_mood_classifier.pt
+🤝 Starting Flower client, connecting to 127.0.0.1:8080 ...
+Training batch, loss=0.6214
+Training batch, loss=0.5958
+Training batch, loss=0.8734
+Training batch, loss=0.4343
+Training batch, loss=0.5014
+Training batch, loss=0.4396
+Training batch, loss=1.0827
+Training batch, loss=0.4525
+Training batch, loss=0.4179
+Training batch, loss=0.4273
+Training batch, loss=0.3639
+Training batch, loss=1.1114
+Training batch, loss=0.3928
+Training batch, loss=0.3607
+Training batch, loss=0.3245
+🤝 Starting Flower client, connecting to 127.0.0.1:8080 ...
+Training batch, loss=0.5592
+Training batch, loss=0.5520
+Training batch, loss=0.5468
+Training batch, loss=0.4487
+Training batch, loss=0.9502
+Training batch, loss=0.4660
+Training batch, loss=0.4242
+Training batch, loss=1.0740
+Training batch, loss=0.3968
+Training batch, loss=0.4010
+Training batch, loss=0.4532
+Training batch, loss=0.3118
+Training batch, loss=1.0937
+Training batch, loss=0.3536
+Training batch, loss=0.3420
+ERROR:grpc._server:Exception iterating responses: 
+Traceback (most recent call last):
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/grpc/_server.py", line 660, in _take_response_from_response_iterator
+    return next(response_iterator), True
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/superlink/fleet/grpc_bidi/flower_service_servicer.py", line 117, in Join
+    ins_wrapper: InsWrapper = next(ins_wrapper_iterator)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/superlink/fleet/grpc_bidi/grpc_bridge.py", line 165, in ins_wrapper_iterator
+    self._raise_if_closed()
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/superlink/fleet/grpc_bidi/grpc_bridge.py", line 81, in _raise_if_closed
+    raise GrpcBridgeClosed()
+flwr.server.superlink.fleet.grpc_bidi.grpc_bridge.GrpcBridgeClosed
+ERROR:grpc._server:Exception iterating responses: 
+Traceback (most recent call last):
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/grpc/_server.py", line 660, in _take_response_from_response_iterator
+    return next(response_iterator), True
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/superlink/fleet/grpc_bidi/flower_service_servicer.py", line 117, in Join
+    ins_wrapper: InsWrapper = next(ins_wrapper_iterator)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/superlink/fleet/grpc_bidi/grpc_bridge.py", line 165, in ins_wrapper_iterator
+    self._raise_if_closed()
+  File "/Users/dakshaladia/fl-mentalhealth/.venv311/lib/python3.11/site-packages/flwr/server/superlink/fleet/grpc_bidi/grpc_bridge.py", line 81, in _raise_if_closed
+    raise GrpcBridgeClosed()
+flwr.server.superlink.fleet.grpc_bidi.grpc_bridge.GrpcBridgeClosed
